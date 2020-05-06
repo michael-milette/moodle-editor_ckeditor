@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'editor_tinymce', language 'en', branch 'MOODLE_20_STABLE'
+ * Strings for component 'editor_ckeditor', language 'en'.
  *
  * @package    editor
  * @subpackage ckeditor
@@ -32,6 +32,7 @@
 $string['pluginname'] = 'CKEditor HTML editor';
 $string['toolbar'] = 'Toolbar definition';
 $string['toolbarhelp'] = "Separates toolbars with a single '/' on a line, groups of buttons with a newline, buttons with a comma, use '-' as a spacer";
+$string['settings'] = 'General settings';
 $string['styles'] = 'Styles combo definition';
 $string['styleshelp'] = 'These style definitions are for the Style combo; be carefull when editing, any typo will kill the combo ! :-(';
 $string['styleset'] = 'StyleSet filename';
@@ -42,3 +43,4 @@ $string['editorcss'] = 'Editor stylesheet';
 $string['editorcsshelp'] = 'Additional stylesheet filename to load in editor';
 $string['skin']='yui3';
 $string['skinhelp']='One of "kama","office2003","v2" or "yui3" (default) (yes, a selector would be better, but what if you want to make your own skin ?)';
+$string['privacy:metadata'] = 'The CKEditor HTML editor plugin does not store any personal data.';

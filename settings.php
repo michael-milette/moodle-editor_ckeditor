@@ -26,31 +26,26 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+$ADMIN->add('editorsettings', new admin_category('editorckeditor', $editor->displayname, $editor->is_enabled() === false));
+
+$settings = new admin_settingpage('editorsettingsckeditor', new lang_string('settings', 'editor_ckeditor'));
 if ($ADMIN->fulltree) {
-
-    require_once $CFG->dirroot . '/lib/editor/ckeditor/lib.php';
-
-    //$items=array();
-    //$items[] = 
-
-    //$settings->add( new admin_settings_heading('editor_ckeditor/settings', get_string('ckeditorsettings','admin'));
-
+    require_once(__DIR__.'/lib.php');
     // toolbar definition
     $settings->add(new admin_setting_configtextarea('editor_ckeditor/toolbar', 
         get_string('toolbar','editor_ckeditor'), get_string('toolbarhelp','editor_ckeditor'), 
         ckeditor_texteditor::get_raw_toolbar(),PARAM_RAW,80,10));
 
-
     $stylesetname =  new admin_setting_configtext('editor_ckeditor/stylesetname',
         get_string('stylesetname','editor_ckeditor'), get_string('stylesetnamehelp','editor_ckeditor'),
         'default');
-    $settings->add( $stylesetname );
+    $settings->add($stylesetname);
 
-    $editorcss =  new admin_setting_configfile('editor_ckeditor/editorcss',
+    $editorcss = new admin_setting_configfile('editor_ckeditor/editorcss',
         get_string('editorcss','editor_ckeditor'), get_string('editorcsshelp','editor_ckeditor'),
         '');
     //$editorcss->update_callback...
-    $settings->add( $editorcss );
+    $settings->add($editorcss);
 
     $skin =  new admin_setting_configtext('editor_ckeditor/skin',
         get_string('skin','editor_ckeditor'), get_string('skinhelp','editor_ckeditor'),
@@ -61,7 +56,15 @@ if ($ADMIN->fulltree) {
         'Extra plugins','Comma separated list of additional plugins your site wants to load',
         //get_string('stylesetname','editor_ckeditor'), get_string('stylesetnamehelp','editor_ckeditor'),
         '');
-    $settings->add( $extraplugins );
-
+    $settings->add($extraplugins);
 }
+$ADMIN->add('editorckeditor', $settings);
+unset($settings);
 
+// foreach (core_plugin_manager::instance()->get_plugins_of_type('ckeditor') as $plugin) {
+    // /** @var \editor_ckeditor\plugininfo\ckeditor $plugin */
+    // $plugin->load_settings($ADMIN, 'editorckeditor', $hassiteconfig);
+// }
+
+// CKEditor does not have standard settings page.
+$settings = null;

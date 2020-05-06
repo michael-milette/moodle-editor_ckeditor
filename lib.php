@@ -1,6 +1,4 @@
 <?php
-// vim: set ai et ts=4 sts=4 sw=4:
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -31,47 +29,60 @@ class ckeditor_texteditor extends texteditor {
     /** @var string active version - directory name */
     const version = '3.5.2';
 
+    /**
+     * Is the current browser supported by this editor?
+     * @return bool
+     */
     public function supported_by_browser() {
-        if (check_browser_version('MSIE', 6)) {
-            return true;
-        }
-        if (check_browser_version('Gecko', 20030516)) {
-            return true;
-        }
-        if (check_browser_version('Safari', 412)) {
-            return true;
-        }
-        if (check_browser_version('Chrome', 6)) {
-            return true;
-        }
-        if (check_browser_version('Opera', 9)) {
-            return true;
-        }
-
-        return false;
+        // We don't support any browsers which it doesn't support.
+        return true;
     }
 
+    /**
+     * Returns array of supported text formats.
+     * @return array
+     */
     public function get_supported_formats() {
+        // FORMAT_MOODLE is not supported here, sorry.
         return array(FORMAT_HTML => FORMAT_HTML);
     }
 
+    /**
+     * Returns text format preferred by this editor.
+     * @return int
+     */
     public function get_preferred_format() {
         return FORMAT_HTML;
     }
 
+    /**
+     * Does this editor support picking from repositories?
+     * @return bool
+     */
     public function supports_repositories() {
         return true;
     }
 
+    /**
+     * Sets up head code if necessary.
+     */
     public function head_setup() {
     }
 
+    /**
+     * Use this editor for give element.
+     *
+     * @param string $elementid
+     * @param array $options
+     * @param null $fpoptions
+     */
     public function use_editor($elementid, array $options=null, $fpoptions=null) {
         global $PAGE;
 
+        // Note: use full moodle_url instance to prevent standard JS loader, make sure we are using https on profile page if required.
         $jsmodule = array(
             'name'     => 'editor_ckeditor',
-            'fullpath' => '/lib/editor/ckeditor/module.js',
+            'fullpath' => new moodle_url('/lib/editor/ckeditor/module.js'),
             'requires' => array('base','json'),
             /*'strings' => array(
                 array('something', 'mymod'),
@@ -82,7 +93,7 @@ class ckeditor_texteditor extends texteditor {
         );
         //$PAGE->requires->js_init_call('M.mod_mymod.init_something', array('some', 'data', 'from', 'PHP'), false, $jsmodule);        
         
-        $PAGE->requires->js('/lib/editor/ckeditor/ckeditor/'.self::version.'/ckeditor.js');
+        $PAGE->requires->js(new moodle_url('/lib/editor/ckeditor/ckeditor/'.self::version.'/ckeditor.js'));
         $PAGE->requires->js_init_call('M.editor_ckeditor.init_editor', 
             array($elementid, $this->get_init_params($elementid, $options)), true, $jsmodule);
         if ($fpoptions) {
@@ -138,7 +149,7 @@ class ckeditor_texteditor extends texteditor {
             'entities_greek'=> true,
             'entities_latin' => false,
             //'stylesCombo_stylesSet' => 'moodle',
-            'contentsCss' => array('lib/editor/ckeditor/ckeditor/'.self::version.'/contents.css',), //, 'css/admin/ckeditor.css'),
+            'contentsCss' => array(new moodle_url('lib/editor/ckeditor/ckeditor/'.self::version.'/contents.css'),), //, 'css/admin/ckeditor.css'),
             'emoticons' => $this->get_emoticons(),
             'extraPlugins' => $extraplugins,
         );
@@ -264,7 +275,7 @@ class ckeditor_texteditor extends texteditor {
     public static function get_stylescombo_path()
     {
         global $CFG;
-        return $CFG->dirroot . '/lib/editor/ckeditor/ckeditor/' . self::version . '/plugins/styles/styles/';
+        return __DIR__.'/ckeditor/' . self::version . '/plugins/styles/styles/';
     }
 
     public static function get_skin()
